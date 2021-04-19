@@ -1,0 +1,32 @@
+version: '3'
+services:
+  api-database:
+    image: mysql:5.7
+    restart: always
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: senha123
+      MYSQL_DATABASE: laboratory
+      MYSQL_USER: laboratory
+      MYSQL_PASSWORD: laboratory123
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    volumes:
+      - ~/my-db2:/var/lib/mysql
+  app:
+    image: laboratorio-crud:latest
+    restart: always
+    container_name: laboratorio-crud-app
+    environment:
+      spring_profiles_active: docker
+    ports:
+      - '8888:8888'
+    expose:
+      - '8888'
+    links:
+      - api-database
+# Names our volume
+volumes:
+  my-db: {}

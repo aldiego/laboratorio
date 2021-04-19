@@ -1,0 +1,86 @@
+plugins {
+    id 'org.springframework.boot' version '2.4.4'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+    id 'jacoco'
+}
+
+group = 'com.starwars'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('springCloudVersion', "2020.0.2")
+    set('springFoxVersion', "2.9.2")
+}
+
+dependencies {
+
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation "io.springfox:springfox-swagger2:${springFoxVersion}"
+    implementation "io.springfox:springfox-swagger-ui:${springFoxVersion}"
+
+
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.12.0'
+
+    runtimeOnly 'mysql:mysql-connector-java'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+
+    testImplementation ('org.springframework.boot:spring-boot-starter-test'){
+        exclude group: 'junit', module: 'junit'
+    }
+
+    testImplementation("junit:junit:4.13")
+    testRuntimeOnly("org.junit.vintage:junit-vintage-engine:5.6.0")
+
+
+
+}
+
+bootJar {
+    mainClass = 'br.com.laboratory.LaboratoryApplication'
+    project.version=""
+
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
+}
+
+test {
+    useJUnitPlatform()
+    systemProperty 'spring.profiles.active', 'test'
+    finalizedBy jacocoTestReport
+}
+
+sourceSets {
+    integrationTest {
+        java.srcDir file("src/integrationTest/java")
+        resources.srcDir file("src/integrationTest/resources")
+        compileClasspath += sourceSets.main.output + configurations.testRuntime
+        runtimeClasspath += output + compileClasspath
+    }
+}
+
+
+jacocoTestReport {
+    dependsOn test
+}

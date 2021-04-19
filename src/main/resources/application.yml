@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/laboratory
+    username: laboratory
+    password: laboratory123
+    hikari:
+      connectionTimeout: 30000
+      driver-class-name: com.mysql.jdbc.Driver
+      maximum-pool-size: 3
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    hibernate:
+      ddl-auto: create
+
+server:
+  port: 8888
+  servlet:
+    context-path: /api
+
+laboratory:
+  request:
+    max-item-per-page: 50
+

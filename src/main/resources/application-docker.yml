@@ -1,0 +1,3 @@
+spring:
+  datasource:
+    url: jdbc:mysql://api-database:3306/laboratory
